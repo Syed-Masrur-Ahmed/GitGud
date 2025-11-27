@@ -64,7 +64,7 @@ class HeuristicProvider:
                 confidence=50
             )
         
-        # Nothing to do
+        # Nothing to push - clean
         if context.commits_ahead == 0 and context.uncommitted_changes == 0:
             return AIResponse(
                 strategy='manual',
@@ -72,6 +72,17 @@ class HeuristicProvider:
                 reasoning='Nothing to push. Working tree is clean and up to date.',
                 risks=[],
                 requires_manual_review=False,
+                confidence=100
+            )
+        
+        # Uncommitted changes but nothing to push
+        if context.commits_ahead == 0 and context.uncommitted_changes > 0:
+            return AIResponse(
+                strategy='manual',
+                commands=[],
+                reasoning='You have uncommitted changes but no commits to push. Commit your changes first with: git add . && git commit -m "your message"',
+                risks=[],
+                requires_manual_review=True,
                 confidence=100
             )
         

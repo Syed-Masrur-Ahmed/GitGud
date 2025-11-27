@@ -3,6 +3,7 @@ from rich.console import Console
 from gitgud.commands.status import status
 from gitgud.commands.push import push
 from gitgud.commands.resolve import resolve
+from gitgud.commands.commit import commit
 
 console = Console()
 
@@ -16,11 +17,13 @@ def main():
     
     Commands:
         status      Show repository health dashboard
+        commit      Smart commit with AI-generated messages
         push        Smart push with AI analysis
         resolve     Resolve divergent branches interactively
     
     Examples:
         gitgud status           # Check repository health
+        gitgud commit           # Commit with AI message
         gitgud push             # Intelligent push
         gitgud resolve          # Fix divergent branches
         gitgud --help           # Show this message
@@ -35,6 +38,7 @@ def test():
 
 # Register commands
 main.add_command(status)
+main.add_command(commit)
 main.add_command(push)
 main.add_command(resolve)
 

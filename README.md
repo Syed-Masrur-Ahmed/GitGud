@@ -2,34 +2,34 @@
 
 > An intelligent Python CLI that makes Git operations effortless with AI-powered recommendations
 
-## 🎯 Project Overview
+## Project Overview
 
 GitGud is a Python command-line tool that uses AI (Ollama + CodeLlama) to analyze your Git repository state and recommend the optimal push strategy. No more failed pushes, confusing errors, or Git anxiety!
 
 ```bash
 $ gitgud push
 
-🔍 Analyzing repository...
+Analyzing repository...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📊 Repository State
+Repository State
   Branch: feature/login
-  ↑ Ahead:  3 commits
-  ↓ Behind: 1 commit
+  Ahead:  3 commits
+  Behind: 1 commit
 
-🤖 AI Recommendation (confidence: 85%)
+AI Recommendation (confidence: 85%)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Strategy: pull-then-push
 Reasoning: Pull with rebase to maintain linear history
 
-📝 Commands:
+Commands:
   1. git pull --rebase origin feature/login
   2. git push origin feature/login
 
-Execute? [Y/n] █
+Execute? [Y/n]
 ```
 
-## ✨ Features
+## Features
 
 ### `gitgud status` - Repository Health Dashboard
 
@@ -38,76 +38,114 @@ Beautiful terminal UI showing your repository state at a glance:
 ```
 ╭─────────────────────────────────────────╮
 │  Repository Health                      │
-│  📦 Repository  GitGud                  │
-│  🌿 Branch      main                    │
-│  🔗 Remote      origin/main             │
+│  Repository  GitGud                     │
+│  Branch      main                       │
+│  Remote      origin/main                │
 │                                         │
-│  Status         🟢 CLEAN                │
+│  Status      [OK] CLEAN                 │
 │                                         │
-│  📊 Commits                             │
-│    ↑ Ahead      0 commits               │
-│    ↓ Behind     0 commits               │
+│  Commits                                │
+│    Ahead      0 commits                 │
+│    Behind     0 commits                 │
 │                                         │
-│  📝 Changes                             │
+│  Changes                                │
 │    Modified     0 files                 │
 │    Untracked    0 files                 │
 ╰─────────────────────────────────────────╯
 ```
 
+### `gitgud commit` - Smart Commit with AI Messages
+
+**NEW!** Create commits with AI-generated messages:
+
+- Analyzes your changes and generates appropriate commit messages
+- Follows Conventional Commits format (feat, fix, docs, etc.)
+- Interactive approval/edit workflow
+- Fallback to heuristic generation if AI unavailable
+- Option to use manual messages
+
+**Example:**
+```bash
+$ gitgud commit --ai
+
+GitGud Smart Commit
+
+Changes to be committed:
+  Modified:  3 files
+  Untracked: 1 files
+
+Generating commit message with AI...
+
+Generated commit message:
+┌────────────────────────────────────────┐
+│ feat: add AI-powered commit messages   │
+│                                        │
+│ - Implement CommitMessageGenerator     │
+│ - Add commit command with AI support   │
+│ - Support manual and AI-generated msgs │
+└────────────────────────────────────────┘
+
+? What would you like to do?
+  > Use this message
+    Edit message
+    Enter manually
+    Cancel
+```
+
 ### `gitgud push` - Smart Push with AI
 
 Analyzes your repo and recommends the optimal push strategy:
-- ✅ Handles ahead/behind scenarios
-- ✅ Auto-stashes uncommitted changes
-- ✅ Detects divergent branches
-- ✅ AI + heuristic fallback
-- ✅ Shows risks before executing
+- Handles ahead/behind scenarios
+- Auto-stashes uncommitted changes
+- Detects divergent branches
+- AI + heuristic fallback
+- Shows risks before executing
 
-### `gitgud resolve` - Interactive Divergence Helper 🌟
+### `gitgud resolve` - Interactive Divergence Helper
 
 **NEW!** Stuck with divergent branches? This command walks you through resolution:
 
-- 🔍 Explains what happened in plain English
-- 📋 Shows your options (rebase, merge, force push)
-- ✅ Pros/cons for each approach
-- 🤖 AI-powered recommendations
-- ⚡ Interactive step-by-step execution
+- Explains what happened in plain English
+- Shows your options (rebase, merge, force push)
+- Pros/cons for each approach
+- AI-powered recommendations
+- Interactive step-by-step execution
 
 **Example:**
 ```bash
 $ gitgud resolve
 
-🔴 Branch Divergence Detected
+Branch Divergence Detected
 
 Your situation:
 ├─ You have 2 local commits
 └─ Remote has 3 commits you don't have
 
-📋 Your Options:
-1️⃣  Pull --rebase (RECOMMENDED)
-   ✓ Clean history, linear timeline
-   ⚠ May cause conflicts
+Your Options:
+1. Pull --rebase (RECOMMENDED)
+   + Clean history, linear timeline
+   - May cause conflicts
 
-2️⃣  Pull (merge)
-   ✓ Safe & simple
-   ⚠ Creates merge commit
+2. Pull (merge)
+   + Safe & simple
+   - Creates merge commit
 
-3️⃣  Force push (DANGEROUS)
-   ❌ DELETES teammate's work
+3. Force push (DANGEROUS)
+   ! DELETES teammate's work
 
-🤖 Recommendation: git pull --rebase
+Recommendation: git pull --rebase
 ? How would you like to resolve this? (Use arrows)
   > Pull with rebase (keeps history clean)
     Pull with merge (safer)
     Cancel
 ```
 
-## 📚 Documentation
+## Documentation
 
 - **[PYTHON_PRD.md](PYTHON_PRD.md)** - Complete product requirements and vision
 - **[PYTHON_IMPLEMENTATION_PLAN.md](PYTHON_IMPLEMENTATION_PLAN.md)** - Step-by-step build guide
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation (Development Mode)
 
@@ -131,6 +169,12 @@ cd your-git-repo
 # See repository health dashboard
 gitgud status
 
+# Commit with AI-generated message
+gitgud commit --ai
+
+# Commit with manual message
+gitgud commit -m "your message"
+
 # Smart push with AI analysis
 gitgud push
 
@@ -144,13 +188,13 @@ gitgud push --no-ai
 gitgud --help
 ```
 
-## ⏱️ Build Timeline
+## Build Timeline
 
 - **Estimated Time:** 15-20 hours (11 hours core + buffer)
 - **Difficulty:** Easy-Medium (2.5/5)
 - **MVP Features:** Smart push, status dashboard, AI analysis
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Language:** Python 3.9+
 - **CLI Framework:** Click + Rich (beautiful terminal UI)
@@ -158,16 +202,16 @@ gitgud --help
 - **AI:** Ollama + CodeLlama (local, free, private)
 - **Distribution:** PyPI + PyInstaller (single binary)
 
-## 🎯 Why Python Over Node.js?
+## Why Python Over Node.js?
 
-- ✅ **Industry Standard** - Most Git/DevOps tools are Python (aws-cli, ansible)
-- ✅ **Faster to build** - 15-20 hours vs 25+ for Node.js
-- ✅ **Cleaner code** - Less boilerplate, more readable
-- ✅ **Better libraries** - GitPython, Click, Rich are superior
-- ✅ **Single binary** - PyInstaller creates standalone executables
-- ✅ **Native AI ecosystem** - Python is the AI language
+- **Industry Standard** - Most Git/DevOps tools are Python (aws-cli, ansible)
+- **Faster to build** - 15-20 hours vs 25+ for Node.js
+- **Cleaner code** - Less boilerplate, more readable
+- **Better libraries** - GitPython, Click, Rich are superior
+- **Single binary** - PyInstaller creates standalone executables
+- **Native AI ecosystem** - Python is the AI language
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 gitgud/
@@ -184,20 +228,20 @@ gitgud/
         └── CLI_IMPLEMENTATION_PLAN.md  # Node.js plan (archived)
 ```
 
-## 🏗️ Implementation Status
+## Implementation Status
 
-- [x] Phase 0: Environment Setup ✅
-- [x] Phase 1: Project Initialization ✅
-- [x] Phase 2: Git Integration ✅
-- [x] Phase 3: AI Services ✅
-- [x] Phase 4: Smart Push Command ✅
-- [x] **BONUS: Resolve Command** ✅ (Interactive divergent branch helper)
-- [x] Phase 5: Polish & Documentation ✅
+- [x] Phase 0: Environment Setup (Complete)
+- [x] Phase 1: Project Initialization (Complete)
+- [x] Phase 2: Git Integration (Complete)
+- [x] Phase 3: AI Services (Complete)
+- [x] Phase 4: Smart Push Command (Complete)
+- [x] **BONUS: Resolve Command** (Complete) - Interactive divergent branch helper
+- [x] Phase 5: Polish & Documentation (Complete)
 - [ ] Phase 6: Publish to PyPI (Coming soon)
 
-**Status: MVP Complete! 🎉**
+**Status: MVP Complete!**
 
-## 🎓 Learning Outcomes
+## Learning Outcomes
 
 Building this project teaches:
 - Python CLI tool development (Click + Rich)
@@ -207,23 +251,23 @@ Building this project teaches:
 - Python packaging (PyPI + PyInstaller)
 - Open source project management
 
-## 📝 Next Steps
+## Next Steps
 
 1. **Read the PRD:** Open [PYTHON_PRD.md](PYTHON_PRD.md) to understand the vision
 2. **Follow the plan:** Open [PYTHON_IMPLEMENTATION_PLAN.md](PYTHON_IMPLEMENTATION_PLAN.md)
 3. **Start building:** Begin with Phase 0 (Environment Setup - 30 min)
 4. **Ship it:** Publish to PyPI and share with the world!
 
-## 🤝 Future Enhancements
+## Future Enhancements
 
-### Already Built ✅
-- ✅ Smart push/pull analysis
-- ✅ Divergent branch resolution
-- ✅ Beautiful Rich terminal UI
-- ✅ AI + heuristic providers
+### Already Built
+- Smart push/pull analysis
+- Divergent branch resolution
+- Beautiful Rich terminal UI
+- AI + heuristic providers
+- AI-generated commit messages (`gitgud commit`)
 
 ### Coming Next
-- AI-generated commit messages (`gitgud commit --ai`)
 - Smart pull command
 - Deep repository analysis (`gitgud analyze`)
 - Interactive TUI mode (like lazygit)
@@ -232,23 +276,23 @@ Building this project teaches:
 - Git hooks integration
 - PyInstaller single binary distribution
 
-## 📜 License
+## License
 
 MIT (to be added)
 
-## 👤 Author
+## Author
 
 Your Name - [GitHub](https://github.com/yourusername)
 
 ---
 
-**Ready to make Git easy for everyone? Start building! 🚀**
+**Ready to make Git easy for everyone? Start building!**
 
 Follow the Python implementation plan step-by-step, and you'll have a working CLI in 15-20 hours.
 
 ### Why Python Won:
-- ⚡ **40% faster to build** than Node.js version
-- 🎨 **Better libraries** - Click + Rich are best-in-class
-- 🏆 **Industry standard** - DevOps tools are Python
-- 📦 **Easier distribution** - Single binary with PyInstaller
+- **40% faster to build** than Node.js version
+- **Better libraries** - Click + Rich are best-in-class
+- **Industry standard** - DevOps tools are Python
+- **Easier distribution** - Single binary with PyInstaller
 
