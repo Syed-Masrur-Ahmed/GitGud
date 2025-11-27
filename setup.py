@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="gitgud-cli",
-    version="1.0.2",
+    version="1.0.3",
     description="AI-powered Git assistant",
     long_description=long_description,
     long_description_content_type="text/markdown",

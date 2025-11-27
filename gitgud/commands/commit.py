@@ -58,6 +58,16 @@ def commit(message, ai, manual):
     console.print("[bold]Changes to be committed:[/bold]")
     console.print(f"  Modified:  {status.modified} files")
     console.print(f"  Untracked: {status.created} files")
+    
+    # Warn about large commits
+    total_files = status.modified + status.created
+    if total_files > 100:
+        console.print(f"\n[yellow]Warning: Committing {total_files} files at once![/yellow]")
+        console.print("[dim]Consider breaking this into smaller commits[/dim]")
+        if not click.confirm("\nContinue anyway?", default=False):
+            console.print("[dim]Commit cancelled[/dim]\n")
+            return
+    
     console.print()
     
     # Get diff for AI analysis

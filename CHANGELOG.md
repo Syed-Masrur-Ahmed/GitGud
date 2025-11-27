@@ -5,6 +5,18 @@ All notable changes to GitGud will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-11-27
+
+### Fixed
+- Improved heuristic commit message generation accuracy
+- Removed overly specific keyword matching that caused false positives
+- Added warning when committing >100 files at once
+- More conservative and generic for large changesets
+
+### Changed
+- Heuristic now prioritizes actual code changes over generic keywords
+- Better handling of large file counts
+
 ## [1.0.2] - 2025-11-27
 
 ### Fixed

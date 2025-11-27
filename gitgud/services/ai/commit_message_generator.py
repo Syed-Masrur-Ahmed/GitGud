@@ -240,8 +240,13 @@ Example output:
         description = "update files"
         
         # Determine type and create specific description
+        # For large changesets, be generic
+        if len(file_names) > 50:
+            commit_type = "chore"
+            description = f"update {len(file_names)} files"
+        
         # Check for new features first (before fix, since 'add' is common)
-        if is_feature or has_new_files:
+        elif is_feature or has_new_files:
             commit_type = "feat"
             
             # Prioritize function/class detection for most accurate description
@@ -249,17 +254,6 @@ Example output:
                 # Use actual code additions for description
                 item_desc = ', '.join(added_items[:2])
                 description = f"implement {item_desc}"
-            # Then check for specific domain features
-            elif 'authentication' in diff.lower() or 'login' in diff.lower():
-                description = "add authentication system"
-            elif 'commit' in diff.lower() and 'message' in diff.lower():
-                description = "add commit message generation"
-            elif 'api' in diff.lower() and 'endpoint' in diff.lower():
-                description = "add API integration"
-            elif 'ascii' in diff.lower() and ('art' in diff.lower() or 'splash' in diff.lower()):
-                description = "add ASCII art splash screen"
-            elif 'gradient' in diff.lower() and 'color' in diff.lower():
-                description = "add colored terminal output"
             elif added_items:
                 # Single item
                 description = f"implement {added_items[0]}"
