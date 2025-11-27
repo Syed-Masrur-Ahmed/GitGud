@@ -5,7 +5,7 @@ A command-line tool that makes Git operations effortless with
 intelligent analysis and recommendations.
 """
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __author__ = "Syed Masrur Ahmed"
 __email__ = "ahmedsyedmasrur@gmail.com"
 

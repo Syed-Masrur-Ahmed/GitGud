@@ -63,7 +63,15 @@ class GitService:
         # Get file changes
         try:
             modified = len([item for item in self.repo.index.diff(None)])
-            created = len(self.repo.untracked_files)
+            
+            # Count untracked items (files + directories) at top level only
+            # Use git status --short to avoid counting every file in untracked dirs
+            untracked_items = set()
+            for item in self.repo.untracked_files:
+                # Get top-level item (file or directory)
+                top_level = item.split('/')[0]
+                untracked_items.add(top_level)
+            created = len(untracked_items)
             
             # Check for staged changes too
             staged = len(self.repo.index.diff("HEAD")) if self.repo.head.is_valid() else 0
