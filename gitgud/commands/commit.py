@@ -263,10 +263,17 @@ def _get_diff(git: GitService) -> str:
         # Get diff of unstaged changes
         if git.repo:
             diff = git.repo.git.diff()
-            # Also get untracked files
+            # Also get untracked files (top-level only to avoid listing thousands)
             untracked = git.repo.untracked_files
             if untracked:
-                diff += f"\n\nUntracked files:\n" + "\n".join(f"  {f}" for f in untracked)
+                # Get unique top-level items only
+                top_level_untracked = set()
+                for item in untracked:
+                    top_level = item.split('/')[0]
+                    top_level_untracked.add(top_level)
+                
+                if top_level_untracked:
+                    diff += f"\n\nUntracked files:\n" + "\n".join(f"  {f}" for f in sorted(top_level_untracked))
             return diff if diff else ""
     except Exception:
         return ""
