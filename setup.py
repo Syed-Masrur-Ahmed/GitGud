@@ -11,7 +11,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Syed Masrur Ahmed",
     author_email="ahmedsyedmasrur@gmail.com",
-    url="https://github.com/yourusername/gitgud",
+    url="https://github.com/Syed-Masrur-Ahmed/GitGud",
     license="MIT",
     packages=find_packages(),
     install_requires=[

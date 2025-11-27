@@ -1,44 +1,21 @@
 # GitGud - AI-Powered Git Assistant
 
-> An intelligent Python CLI that makes Git operations effortless with AI-powered recommendations
+> Make Git operations effortless with intelligent analysis and recommendations
 
-## Project Overview
-
-GitGud is a Python command-line tool that uses AI (Ollama + CodeLlama) to analyze your Git repository state and recommend the optimal push strategy. No more failed pushes, confusing errors, or Git anxiety!
-
-```bash
-$ gitgud push
-
-Analyzing repository...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Repository State
-  Branch: feature/login
-  Ahead:  3 commits
-  Behind: 1 commit
-
-AI Recommendation (confidence: 85%)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Strategy: pull-then-push
-Reasoning: Pull with rebase to maintain linear history
-
-Commands:
-  1. git pull --rebase origin feature/login
-  2. git push origin feature/login
-
-Execute? [Y/n]
-```
+GitGud is a command-line tool that analyzes your Git repository and provides smart recommendations for push, pull, and commit operations. No more failed pushes, confusing errors, or Git anxiety!
 
 ## Features
 
-### `gitgud status` - Repository Health Dashboard
+### Repository Health Dashboard
 
-Beautiful terminal UI showing your repository state at a glance:
+See your repository state at a glance with a beautiful terminal UI:
 
-```
+```bash
+$ gitgud status
+
 ╭─────────────────────────────────────────╮
 │  Repository Health                      │
-│  Repository  GitGud                     │
+│  Repository  my-project                 │
 │  Branch      main                       │
 │  Remote      origin/main                │
 │                                         │
@@ -54,23 +31,10 @@ Beautiful terminal UI showing your repository state at a glance:
 ╰─────────────────────────────────────────╯
 ```
 
-### `gitgud commit` - Smart Commit Messages
+### Smart Commit Messages
 
-**NEW!** Create commits with intelligently generated messages:
+Automatically generate descriptive commit messages from your changes:
 
-- Analyzes your changes (file names, patterns, diff content)
-- Generates descriptive commit messages automatically
-- Follows Conventional Commits format (feat, fix, docs, etc.)
-- Interactive approval/edit workflow
-- Optional AI enhancement (experimental)
-
-**Default mode uses smart heuristics:**
-- Detects features, fixes, docs, refactoring by analyzing diff
-- Extracts file names for context
-- Creates specific descriptions
-- Fast and reliable
-
-**Example:**
 ```bash
 $ gitgud commit
 
@@ -84,11 +48,11 @@ Generating commit message...
 
 Generated commit message:
 ┌────────────────────────────────────────┐
-│ feat: add commit message generation    │
+│ feat: add user authentication          │
 │                                        │
-│ - add commit_message_generator.py     │
-│ - add commit.py                       │
-│ - update cli.py                       │
+│ - add auth service                     │
+│ - add login component                  │
+│ - update routes                        │
 └────────────────────────────────────────┘
 
 ? What would you like to do?
@@ -98,26 +62,49 @@ Generated commit message:
     Cancel
 ```
 
-### `gitgud push` - Smart Push with AI
+**Features:**
+- Analyzes file changes and diff patterns
+- Follows Conventional Commits format (feat, fix, docs, etc.)
+- Interactive approval and editing
+- Optional AI enhancement with `--ai` flag
 
-Analyzes your repo and recommends the optimal push strategy:
-- Handles ahead/behind scenarios
-- Auto-stashes uncommitted changes
-- Detects divergent branches
-- AI + heuristic fallback
-- Shows risks before executing
+### Smart Push
 
-### `gitgud resolve` - Interactive Divergence Helper
+Intelligent push strategy based on repository state:
 
-**NEW!** Stuck with divergent branches? This command walks you through resolution:
+```bash
+$ gitgud push
 
-- Explains what happened in plain English
-- Shows your options (rebase, merge, force push)
-- Pros/cons for each approach
-- AI-powered recommendations
-- Interactive step-by-step execution
+Analyzing repository...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Example:**
+Repository State
+  Branch: feature/login
+  Ahead:  3 commits
+  Behind: 1 commit
+
+Recommendation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Strategy: pull-then-push
+Reasoning: Pull with rebase to maintain linear history
+
+Commands:
+  1. git pull --rebase origin feature/login
+  2. git push origin feature/login
+
+Execute? [Y/n]
+```
+
+**Handles:**
+- Ahead/behind scenarios
+- Uncommitted changes (auto-stash)
+- Divergent branches
+- Untracked remote branches
+
+### Divergent Branch Resolution
+
+Interactive guidance when your branch has diverged:
+
 ```bash
 $ gitgud resolve
 
@@ -146,36 +133,43 @@ Recommendation: git pull --rebase
     Cancel
 ```
 
-## Documentation
+## Installation
 
-- **[PYTHON_PRD.md](PYTHON_PRD.md)** - Complete product requirements and vision
-- **[PYTHON_IMPLEMENTATION_PLAN.md](PYTHON_IMPLEMENTATION_PLAN.md)** - Step-by-step build guide
-
-## Quick Start
-
-### Installation (Development Mode)
+### From PyPI (Recommended)
 
 ```bash
-# Clone and setup
+pip install gitgud-cli
+```
+
+### From Source
+
+```bash
 git clone https://github.com/Syed-Masrur-Ahmed/GitGud.git
 cd GitGud
-python3 -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -e .
+```
 
-# Setup AI (optional, first time)
+### Optional: AI Enhancement
+
+For experimental AI-powered features, install Ollama:
+
+```bash
+# Install Ollama (https://ollama.ai)
 ollama pull codellama:7b
 ```
 
-### Usage
+AI features are optional - GitGud works great with smart heuristics alone.
+
+## Usage
 
 ```bash
+# Navigate to any Git repository
 cd your-git-repo
 
-# See repository health dashboard
+# Check repository health
 gitgud status
 
-# Commit with auto-generated message (default)
+# Commit with auto-generated message
 gitgud commit
 
 # Commit with AI enhancement (experimental)
@@ -184,124 +178,71 @@ gitgud commit --ai
 # Commit with manual message
 gitgud commit -m "your message"
 
-# Smart push with AI analysis
+# Smart push
 gitgud push
 
-# Resolve divergent branches interactively
+# Resolve divergent branches
 gitgud resolve
 
-# Use heuristics without AI
-gitgud push --no-ai
-
-# Get help
+# Show help
 gitgud --help
 ```
 
-## Build Timeline
+## Commands
 
-- **Estimated Time:** 15-20 hours (11 hours core + buffer)
-- **Difficulty:** Easy-Medium (2.5/5)
-- **MVP Features:** Smart push, status dashboard, AI analysis
+| Command | Description |
+|---------|-------------|
+| `gitgud status` | Show repository health dashboard |
+| `gitgud commit` | Create commit with smart message generation |
+| `gitgud push` | Intelligent push with analysis |
+| `gitgud resolve` | Interactive divergent branch helper |
 
 ## Tech Stack
 
-- **Language:** Python 3.9+
-- **CLI Framework:** Click + Rich (beautiful terminal UI)
-- **Git Integration:** GitPython
-- **AI:** Ollama + CodeLlama (local, free, private)
-- **Distribution:** PyPI + PyInstaller (single binary)
+- **Python 3.9+**
+- **Click** - CLI framework
+- **Rich** - Beautiful terminal output
+- **GitPython** - Git integration
+- **Ollama** - Optional AI enhancement (local, private)
 
-## Why Python Over Node.js?
+## How It Works
 
-- **Industry Standard** - Most Git/DevOps tools are Python (aws-cli, ansible)
-- **Faster to build** - 15-20 hours vs 25+ for Node.js
-- **Cleaner code** - Less boilerplate, more readable
-- **Better libraries** - GitPython, Click, Rich are superior
-- **Single binary** - PyInstaller creates standalone executables
-- **Native AI ecosystem** - Python is the AI language
+GitGud analyzes your repository using:
 
-## Project Structure
+1. **Git state inspection** - branches, commits, changes
+2. **Pattern recognition** - detects common scenarios
+3. **Smart heuristics** - rule-based recommendations
+4. **Optional AI** - LLM-powered insights (experimental)
 
-```
-gitgud/
-├── README.md                           # This file
-├── PYTHON_PRD.md                       # Product requirements
-├── PYTHON_IMPLEMENTATION_PLAN.md       # Build guide (start here!)
-└── archive/
-    ├── vscode-extension/               # Old VS Code extension work
-    │   ├── GitGud/                     # Extension code (archived)
-    │   ├── PRD.md                      # Extension PRD (archived)
-    │   └── IMPLEMENTATION_PLAN.md      # Extension plan (archived)
-    └── nodejs-cli/                     # Old Node.js CLI work
-        ├── CLI_PRD.md                  # Node.js PRD (archived)
-        └── CLI_IMPLEMENTATION_PLAN.md  # Node.js plan (archived)
+All analysis happens locally. No data is sent to external services.
+
+## Configuration
+
+GitGud works out of the box with sensible defaults. No configuration needed.
+
+For AI features, ensure Ollama is running:
+```bash
+ollama serve
 ```
 
-## Implementation Status
+## Contributing
 
-- [x] Phase 0: Environment Setup (Complete)
-- [x] Phase 1: Project Initialization (Complete)
-- [x] Phase 2: Git Integration (Complete)
-- [x] Phase 3: AI Services (Complete)
-- [x] Phase 4: Smart Push Command (Complete)
-- [x] **BONUS: Resolve Command** (Complete) - Interactive divergent branch helper
-- [x] Phase 5: Polish & Documentation (Complete)
-- [ ] Phase 6: Publish to PyPI (Coming soon)
-
-**Status: MVP Complete!**
-
-## Learning Outcomes
-
-Building this project teaches:
-- Python CLI tool development (Click + Rich)
-- Git internals and operations (GitPython)
-- AI integration (Ollama/LLMs)
-- Beautiful terminal UI design
-- Python packaging (PyPI + PyInstaller)
-- Open source project management
-
-## Next Steps
-
-1. **Read the PRD:** Open [PYTHON_PRD.md](PYTHON_PRD.md) to understand the vision
-2. **Follow the plan:** Open [PYTHON_IMPLEMENTATION_PLAN.md](PYTHON_IMPLEMENTATION_PLAN.md)
-3. **Start building:** Begin with Phase 0 (Environment Setup - 30 min)
-4. **Ship it:** Publish to PyPI and share with the world!
-
-## Future Enhancements
-
-### Already Built
-- Smart push/pull analysis
-- Divergent branch resolution
-- Beautiful Rich terminal UI
-- AI + heuristic providers
-- AI-generated commit messages (`gitgud commit`)
-
-### Coming Next
-- Smart pull command
-- Deep repository analysis (`gitgud analyze`)
-- Interactive TUI mode (like lazygit)
-- VS Code extension wrapper (reuse CLI logic)
-- Team collaboration insights
-- Git hooks integration
-- PyInstaller single binary distribution
+Contributions welcome! Please feel free to submit issues and pull requests.
 
 ## License
 
-MIT (to be added)
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Author
 
-Your Name - [GitHub](https://github.com/yourusername)
+**Syed Masrur Ahmed**
+- GitHub: [@Syed-Masrur-Ahmed](https://github.com/Syed-Masrur-Ahmed)
+- Email: ahmedsyedmasrur@gmail.com
 
 ---
 
-**Ready to make Git easy for everyone? Start building!**
+**Make Git effortless. Install GitGud today!**
 
-Follow the Python implementation plan step-by-step, and you'll have a working CLI in 15-20 hours.
-
-### Why Python Won:
-- **40% faster to build** than Node.js version
-- **Better libraries** - Click + Rich are best-in-class
-- **Industry standard** - DevOps tools are Python
-- **Easier distribution** - Single binary with PyInstaller
-
+```bash
+pip install gitgud-cli
+```

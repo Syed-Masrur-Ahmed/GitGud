@@ -7,68 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-11-27
 
-### Added - MVP Release! 🎉
+### Added
 
-#### Commands
-- **`gitgud status`** - Beautiful repository health dashboard
-  - Shows branch, remote, commits ahead/behind, file changes
-  - Color-coded health indicators (🟢 Clean, 🟡 Needs attention, 🔴 Divergent)
-  - Helpful suggestions for next steps
+#### Core Commands
+- **`gitgud status`** - Repository health dashboard
+  - Real-time branch and remote status
+  - Commits ahead/behind tracking
+  - File changes overview
+  - Color-coded health indicators
+  - Actionable next-step suggestions
   
-- **`gitgud push`** - Smart push with AI/heuristic analysis
-  - Analyzes repository state and recommends optimal strategy
-  - Handles common scenarios (pull first, stash changes, etc.)
-  - AI-powered with Ollama + rule-based heuristic fallback
-  - Safety confirmations before execution
-  - Shows risks and reasoning
+- **`gitgud commit`** - Smart commit message generation
+  - Automatic message generation from changes
+  - Conventional Commits format support (feat, fix, docs, etc.)
+  - Interactive editing and approval
+  - Pattern detection (features, fixes, refactoring)
+  - Optional AI enhancement with `--ai` flag
+  - Fast heuristic-based default mode
   
-- **`gitgud resolve`** - Interactive divergent branch resolver
-  - Explains divergence situations in plain English
-  - Shows all options (rebase, merge, force push) with pros/cons
-  - AI-powered recommendations
-  - Step-by-step guided execution
-  - Handles uncommitted changes automatically
+- **`gitgud push`** - Intelligent push analysis
+  - Context-aware strategy recommendations
+  - Automatic scenario detection (ahead, behind, divergent)
+  - Safety confirmations with risk assessment
+  - Uncommitted changes handling
+  - AI and heuristic-based analysis
+  
+- **`gitgud resolve`** - Divergent branch resolution
+  - Clear explanation of divergence situations
+  - Interactive option selection (rebase, merge, force push)
+  - Pros and cons for each approach
+  - Guided step-by-step execution
+  - Automatic stashing of uncommitted changes
 
-#### Core Services
-- **Git Integration** via GitPython
-  - Repository state analysis
-  - Ahead/behind calculations
-  - Branch tracking detection
-  - Command execution
-  
-- **AI Services**
-  - Ollama provider for AI-powered recommendations
-  - Heuristic provider for rule-based decisions
-  - Automatic fallback system for reliability
-  - Context building from repository state
-
-#### Infrastructure
-- Click-based CLI with beautiful Rich terminal output
+#### Technical Features
+- Click-based CLI framework with Rich terminal output
+- GitPython integration for repository operations
+- Optional Ollama AI provider with automatic fallback
+- Rule-based heuristic provider for reliability
+- Type-safe dataclasses for Git and AI contexts
+- Comprehensive error handling and edge cases
 - Interactive prompts with inquirer
-- Type-safe dataclasses for Git and AI types
-- Comprehensive error handling
-- Edge case handling (no remote, detached HEAD, etc.)
 
 ### Technical Details
-- **Language**: Python 3.9+
-- **Dependencies**: Click, Rich, GitPython, requests, PyYAML, inquirer
-- **AI Model**: Ollama + CodeLlama (optional)
-- **Distribution**: pip installable in development mode
+- **Python**: 3.9+ required
+- **Core Dependencies**: Click, Rich, GitPython, inquirer
+- **Optional Dependencies**: Ollama for AI features
+- **License**: MIT
 
-### Documentation
-- Comprehensive README with examples
-- Detailed implementation plan
-- Product requirements document
-- Inline help text for all commands
+### Distribution
+- Available via pip in development mode
+- PyPI package: `gitgud-cli`
 
 ## [Unreleased]
 
 ### Planned Features
-- AI-generated commit messages
-- Smart pull command
-- Deep repository analysis
-- PyPI package distribution
-- PyInstaller single binary
-- Basic test coverage
-- VS Code extension integration
+- Smart pull command with conflict detection
+- Deep repository analysis and insights
+- Single binary distribution via PyInstaller
+- Test coverage and CI/CD
+- Performance optimizations
 
+---
+
+For installation and usage instructions, see [README.md](README.md)
