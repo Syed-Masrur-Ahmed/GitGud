@@ -1,5 +1,6 @@
 import click
 from rich.console import Console
+from gitgud.commands.status import status
 
 console = Console()
 
@@ -14,6 +15,9 @@ def test():
     """Test if GitGud is working."""
     console.print("[green]✅ GitGud is working![/green]")
     console.print("[blue]🚀 Ready to make Git easy![/blue]")
+
+# Register commands
+main.add_command(status)
 
 if __name__ == "__main__":
     main()

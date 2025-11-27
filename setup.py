@@ -4,8 +4,8 @@ setup(
     name="gitgud-cli",
     version="1.0.0",
     description="AI-powered Git assistant",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Syed Masrur Ahmed",
+    author_email="ahmedsyedmasrur@gmail.com",
     packages=find_packages(),
     install_requires=[
         "click>=8.1.0",
