@@ -1,6 +1,7 @@
 import click
 from rich.console import Console
 from gitgud.commands.status import status
+from gitgud.commands.push import push
 
 console = Console()
 
@@ -18,6 +19,7 @@ def test():
 
 # Register commands
 main.add_command(status)
+main.add_command(push)
 
 if __name__ == "__main__":
     main()

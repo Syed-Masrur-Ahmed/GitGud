@@ -110,7 +110,7 @@ class GitService:
         """Execute a git command.
         
         Args:
-            command: Git command to execute (e.g., "push origin main")
+            command: Git command to execute (e.g., "git push origin main")
             
         Returns:
             True if successful, False otherwise
@@ -121,13 +121,20 @@ class GitService:
         try:
             # Parse command
             parts = command.strip().split()
-            if parts[0] != "git":
+            if parts[0] == "git":
+                parts = parts[1:]  # Remove 'git' prefix
+            
+            if not parts:
                 return False
             
-            git_cmd = parts[1:]
+            # Get the git command (e.g., 'stash', 'push', 'pull')
+            git_command = parts[0]
+            git_args = parts[1:]
             
-            # Execute using GitPython
-            self.repo.git.execute(git_cmd)
+            # Execute using GitPython's dynamic method calling
+            # e.g., self.repo.git.stash() or self.repo.git.push('origin', 'main')
+            git_method = getattr(self.repo.git, git_command)
+            git_method(*git_args)
             return True
         except Exception as e:
             print(f"Command error: {e}")
