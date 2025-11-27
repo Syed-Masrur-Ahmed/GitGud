@@ -1,5 +1,6 @@
 import click
 from rich.console import Console
+from gitgud import __version__
 from gitgud.commands.status import status
 from gitgud.commands.push import push
 from gitgud.commands.resolve import resolve
@@ -29,7 +30,7 @@ class CustomGroup(click.Group):
 
 @click.group(cls=CustomGroup, invoke_without_command=True)
 @click.pass_context
-@click.version_option(version="1.0.0")
+@click.version_option(version=__version__)
 def main(ctx):
     """
     GitGud - AI-powered Git assistant.
