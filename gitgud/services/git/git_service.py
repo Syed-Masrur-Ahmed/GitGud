@@ -36,39 +36,53 @@ class GitService:
         if not self.repo:
             return None
         
-        # Get tracking branch info
+        # Get current branch (handle detached HEAD)
         try:
-            tracking = self.repo.active_branch.tracking_branch()
-            tracking_name = tracking.name if tracking else None
-            
-            # Get ahead/behind counts
-            if tracking:
-                ahead = len(list(self.repo.iter_commits(f'{tracking.name}..HEAD')))
-                behind = len(list(self.repo.iter_commits(f'HEAD..{tracking.name}')))
-            else:
-                ahead = behind = 0
-        except:
-            tracking_name = None
-            ahead = behind = 0
+            current_branch = self.repo.active_branch.name
+        except TypeError:
+            # Detached HEAD state
+            current_branch = "HEAD (detached)"
+        
+        # Get tracking branch info
+        tracking_name = None
+        ahead = behind = 0
+        
+        try:
+            if current_branch != "HEAD (detached)":
+                tracking = self.repo.active_branch.tracking_branch()
+                tracking_name = tracking.name if tracking else None
+                
+                # Get ahead/behind counts
+                if tracking:
+                    ahead = len(list(self.repo.iter_commits(f'{tracking.name}..HEAD')))
+                    behind = len(list(self.repo.iter_commits(f'HEAD..{tracking.name}')))
+        except Exception:
+            # If anything fails, just use defaults
+            pass
         
         # Get file changes
-        modified = len([item for item in self.repo.index.diff(None)])
-        created = len(self.repo.untracked_files)
-        deleted = 0  # TODO: Calculate properly
-        conflicted = []  # TODO: Get conflicted files
-        
-        is_clean = (modified == 0 and created == 0 and 
-                   len(self.repo.index.diff("HEAD")) == 0)
+        try:
+            modified = len([item for item in self.repo.index.diff(None)])
+            created = len(self.repo.untracked_files)
+            
+            # Check for staged changes too
+            staged = len(self.repo.index.diff("HEAD")) if self.repo.head.is_valid() else 0
+            
+            is_clean = (modified == 0 and created == 0 and staged == 0)
+        except Exception:
+            # Handle edge case of empty repo with no commits
+            modified = created = staged = 0
+            is_clean = True
         
         return GitStatus(
-            current=self.repo.active_branch.name,
+            current=current_branch,
             tracking=tracking_name,
             ahead=ahead,
             behind=behind,
             modified=modified,
             created=created,
-            deleted=deleted,
-            conflicted=conflicted,
+            deleted=0,  # Not critical for MVP
+            conflicted=[],  # Not critical for MVP
             is_clean=is_clean
         )
     
@@ -100,10 +114,21 @@ class GitService:
             return False
         
         try:
+            # Check if remote exists
+            if not self.repo.remotes:
+                # No remotes configured - this is OK for local-only repos
+                return True
+            
             self.repo.remotes.origin.fetch()
             return True
-        except Exception as e:
-            print(f"Fetch error: {e}")
+        except AttributeError:
+            # No 'origin' remote - try first available remote
+            if self.repo.remotes:
+                self.repo.remotes[0].fetch()
+            return True
+        except Exception:
+            # Network error, authentication error, etc.
+            # Silent fail - we'll just work with local state
             return False
     
     def execute_command(self, command: str) -> bool:

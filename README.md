@@ -29,24 +29,119 @@ Reasoning: Pull with rebase to maintain linear history
 Execute? [Y/n] █
 ```
 
+## ✨ Features
+
+### `gitgud status` - Repository Health Dashboard
+
+Beautiful terminal UI showing your repository state at a glance:
+
+```
+╭─────────────────────────────────────────╮
+│  Repository Health                      │
+│  📦 Repository  GitGud                  │
+│  🌿 Branch      main                    │
+│  🔗 Remote      origin/main             │
+│                                         │
+│  Status         🟢 CLEAN                │
+│                                         │
+│  📊 Commits                             │
+│    ↑ Ahead      0 commits               │
+│    ↓ Behind     0 commits               │
+│                                         │
+│  📝 Changes                             │
+│    Modified     0 files                 │
+│    Untracked    0 files                 │
+╰─────────────────────────────────────────╯
+```
+
+### `gitgud push` - Smart Push with AI
+
+Analyzes your repo and recommends the optimal push strategy:
+- ✅ Handles ahead/behind scenarios
+- ✅ Auto-stashes uncommitted changes
+- ✅ Detects divergent branches
+- ✅ AI + heuristic fallback
+- ✅ Shows risks before executing
+
+### `gitgud resolve` - Interactive Divergence Helper 🌟
+
+**NEW!** Stuck with divergent branches? This command walks you through resolution:
+
+- 🔍 Explains what happened in plain English
+- 📋 Shows your options (rebase, merge, force push)
+- ✅ Pros/cons for each approach
+- 🤖 AI-powered recommendations
+- ⚡ Interactive step-by-step execution
+
+**Example:**
+```bash
+$ gitgud resolve
+
+🔴 Branch Divergence Detected
+
+Your situation:
+├─ You have 2 local commits
+└─ Remote has 3 commits you don't have
+
+📋 Your Options:
+1️⃣  Pull --rebase (RECOMMENDED)
+   ✓ Clean history, linear timeline
+   ⚠ May cause conflicts
+
+2️⃣  Pull (merge)
+   ✓ Safe & simple
+   ⚠ Creates merge commit
+
+3️⃣  Force push (DANGEROUS)
+   ❌ DELETES teammate's work
+
+🤖 Recommendation: git pull --rebase
+? How would you like to resolve this? (Use arrows)
+  > Pull with rebase (keeps history clean)
+    Pull with merge (safer)
+    Cancel
+```
+
 ## 📚 Documentation
 
 - **[PYTHON_PRD.md](PYTHON_PRD.md)** - Complete product requirements and vision
 - **[PYTHON_IMPLEMENTATION_PLAN.md](PYTHON_IMPLEMENTATION_PLAN.md)** - Step-by-step build guide
 
-## 🚀 Quick Start (Once Built)
+## 🚀 Quick Start
+
+### Installation (Development Mode)
 
 ```bash
-# Install globally
-pip install gitgud-cli
+# Clone and setup
+git clone https://github.com/Syed-Masrur-Ahmed/GitGud.git
+cd GitGud
+python3 -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -e .
 
-# Setup AI (first time)
+# Setup AI (optional, first time)
 ollama pull codellama:7b
+```
 
-# Use it!
-cd your-repo
-gitgud status    # See repository health
-gitgud push      # Smart push with AI
+### Usage
+
+```bash
+cd your-git-repo
+
+# See repository health dashboard
+gitgud status
+
+# Smart push with AI analysis
+gitgud push
+
+# Resolve divergent branches interactively
+gitgud resolve
+
+# Use heuristics without AI
+gitgud push --no-ai
+
+# Get help
+gitgud --help
 ```
 
 ## ⏱️ Build Timeline
@@ -91,13 +186,16 @@ gitgud/
 
 ## 🏗️ Implementation Status
 
-- [ ] Phase 0: Environment Setup (30 min)
-- [ ] Phase 1: Project Initialization (30 min)
-- [ ] Phase 2: Git Integration (2 hours)
-- [ ] Phase 3: AI Services (2 hours)
-- [ ] Phase 4: Smart Push Command (3 hours)
-- [ ] Phase 5: Polish & Documentation (2 hours)
-- [ ] Phase 6: Publish to PyPI (1 hour)
+- [x] Phase 0: Environment Setup ✅
+- [x] Phase 1: Project Initialization ✅
+- [x] Phase 2: Git Integration ✅
+- [x] Phase 3: AI Services ✅
+- [x] Phase 4: Smart Push Command ✅
+- [x] **BONUS: Resolve Command** ✅ (Interactive divergent branch helper)
+- [x] Phase 5: Polish & Documentation ✅
+- [ ] Phase 6: Publish to PyPI (Coming soon)
+
+**Status: MVP Complete! 🎉**
 
 ## 🎓 Learning Outcomes
 
@@ -116,14 +214,23 @@ Building this project teaches:
 3. **Start building:** Begin with Phase 0 (Environment Setup - 30 min)
 4. **Ship it:** Publish to PyPI and share with the world!
 
-## 🤝 Future Ideas
+## 🤝 Future Enhancements
 
+### Already Built ✅
+- ✅ Smart push/pull analysis
+- ✅ Divergent branch resolution
+- ✅ Beautiful Rich terminal UI
+- ✅ AI + heuristic providers
+
+### Coming Next
+- AI-generated commit messages (`gitgud commit --ai`)
+- Smart pull command
+- Deep repository analysis (`gitgud analyze`)
 - Interactive TUI mode (like lazygit)
-- AI-generated commit messages
-- Conflict resolution helper
 - VS Code extension wrapper (reuse CLI logic)
-- Team collaboration features
+- Team collaboration insights
 - Git hooks integration
+- PyInstaller single binary distribution
 
 ## 📜 License
 

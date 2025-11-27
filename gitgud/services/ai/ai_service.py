@@ -32,10 +32,9 @@ class AIService:
         for provider in self.providers:
             try:
                 if provider.is_available():
-                    print(f"Using provider: {provider.__class__.__name__}")
                     return provider.analyze(context)
             except Exception as e:
-                print(f"Provider {provider.__class__.__name__} failed: {e}")
-                # Continue to next provider
+                # Silently fall through to next provider
+                continue
         
-        raise Exception("No AI provider available")
+        raise Exception("No AI provider available. Please check Ollama is running or use --no-ai flag.")
