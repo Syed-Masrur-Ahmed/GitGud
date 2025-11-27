@@ -11,25 +11,25 @@ from gitgud.services.ai.commit_message_generator import CommitMessageGenerator
 console = Console()
 
 @click.command()
-@click.option('-m', '--message', help='Commit message (skips AI generation)')
-@click.option('--ai', is_flag=True, help='Force AI generation even with -m')
-@click.option('--no-ai', is_flag=True, help='Skip AI, prompt for manual message')
-def commit(message, ai, no_ai):
-    """Smart commit with optional AI-generated messages.
+@click.option('-m', '--message', help='Commit message (direct)')
+@click.option('--ai', is_flag=True, help='Use AI to generate message (experimental)')
+@click.option('--manual', is_flag=True, help='Prompt for manual message entry')
+def commit(message, ai, manual):
+    """Smart commit with heuristic-generated messages.
     
-    Stages changes and creates a commit. Can generate commit messages
-    using AI (Ollama) by analyzing your changes.
+    Stages changes and creates a commit. By default uses smart heuristics
+    to generate commit messages. Optionally can use AI (Ollama).
     
     Modes:
-    - Default: Interactive - asks if you want AI to generate message
+    - Default: Uses heuristic to generate message
     - With -m: Uses your message directly
-    - With --ai: Forces AI generation (analyzes and suggests message)
-    - With --no-ai: Prompts for manual message entry
+    - With --ai: Uses AI (Ollama) to generate message (experimental)
+    - With --manual: Prompts for manual message entry
     
     Examples:
-        gitgud commit                    # Interactive mode
-        gitgud commit --ai               # AI generates message
-        gitgud commit --no-ai            # Manual message entry
+        gitgud commit                    # Heuristic generation (default)
+        gitgud commit --ai               # AI generation (experimental)
+        gitgud commit --manual           # Manual entry
         gitgud commit -m "fix: bug"      # Direct message
     """
     git = GitService()
@@ -71,29 +71,97 @@ def commit(message, ai, no_ai):
     # Determine message source
     commit_message = None
     
-    if message and not ai:
+    if message:
         # User provided message with -m
         commit_message = message
         console.print(f"[bold]Using provided message:[/bold] {message}\n")
     
-    elif no_ai:
+    elif manual:
         # Manual entry requested
         commit_message = _prompt_manual_message()
         if not commit_message:
             console.print("\n[dim]Commit cancelled[/dim]\n")
             return
     
-    else:
-        # AI generation (default or --ai flag)
+    elif ai:
+        # AI generation (experimental, opt-in)
         console.print("[bold]Generating commit message with AI...[/bold]\n")
         
         generator = CommitMessageGenerator()
         
         with console.status("[cyan]Analyzing changes...[/cyan]"):
-            generated_message = generator.generate(diff, status)
+            try:
+                # Try AI first
+                from gitgud.services.ai.ollama import OllamaProvider
+                ollama = OllamaProvider()
+                if ollama.is_available():
+                    generated_message = generator._generate_with_ai(diff, status)
+                else:
+                    console.print("[yellow]AI not available, using heuristic...[/yellow]")
+                    generated_message = generator._generate_heuristic(diff, status)
+            except:
+                console.print("[yellow]AI failed, using heuristic...[/yellow]")
+                generated_message = generator._generate_heuristic(diff, status)
         
         if not generated_message:
-            console.print("[yellow]AI generation failed. Falling back to manual entry.[/yellow]\n")
+            console.print("[yellow]Generation failed. Using manual entry.[/yellow]\n")
+            commit_message = _prompt_manual_message()
+            if not commit_message:
+                console.print("\n[dim]Commit cancelled[/dim]\n")
+                return
+        else:
+            # Show generated message
+            console.print("[bold]Generated commit message:[/bold]")
+            console.print(Panel(
+                generated_message,
+                border_style="green",
+                padding=(1, 2)
+            ))
+            console.print()
+            
+            # Ask for approval
+            questions = [
+                inquirer.List('action',
+                             message="What would you like to do?",
+                             choices=[
+                                 ('Use this message', 'use'),
+                                 ('Edit message', 'edit'),
+                                 ('Enter manually', 'manual'),
+                                 ('Cancel', 'cancel'),
+                             ],
+                             default='use'),
+            ]
+            
+            answer = inquirer.prompt(questions)
+            
+            if not answer or answer['action'] == 'cancel':
+                console.print("\n[dim]Commit cancelled[/dim]\n")
+                return
+            elif answer['action'] == 'use':
+                commit_message = generated_message
+            elif answer['action'] == 'edit':
+                console.print("\n[dim]Opening editor to edit message...[/dim]")
+                commit_message = _edit_message(generated_message)
+                if not commit_message:
+                    console.print("\n[dim]Commit cancelled[/dim]\n")
+                    return
+            else:  # manual
+                commit_message = _prompt_manual_message()
+                if not commit_message:
+                    console.print("\n[dim]Commit cancelled[/dim]\n")
+                    return
+    
+    else:
+        # Default: Use heuristic generation (fast and reliable)
+        console.print("[bold]Generating commit message...[/bold]\n")
+        
+        generator = CommitMessageGenerator()
+        
+        with console.status("[cyan]Analyzing changes...[/cyan]"):
+            generated_message = generator._generate_heuristic(diff, status)
+        
+        if not generated_message:
+            console.print("[yellow]Generation failed. Using manual entry.[/yellow]\n")
             commit_message = _prompt_manual_message()
             if not commit_message:
                 console.print("\n[dim]Commit cancelled[/dim]\n")

@@ -54,19 +54,25 @@ Beautiful terminal UI showing your repository state at a glance:
 ╰─────────────────────────────────────────╯
 ```
 
-### `gitgud commit` - Smart Commit with AI Messages
+### `gitgud commit` - Smart Commit Messages
 
-**NEW!** Create commits with AI-generated messages:
+**NEW!** Create commits with intelligently generated messages:
 
-- Analyzes your changes and generates appropriate commit messages
+- Analyzes your changes (file names, patterns, diff content)
+- Generates descriptive commit messages automatically
 - Follows Conventional Commits format (feat, fix, docs, etc.)
 - Interactive approval/edit workflow
-- Fallback to heuristic generation if AI unavailable
-- Option to use manual messages
+- Optional AI enhancement (experimental)
+
+**Default mode uses smart heuristics:**
+- Detects features, fixes, docs, refactoring by analyzing diff
+- Extracts file names for context
+- Creates specific descriptions
+- Fast and reliable
 
 **Example:**
 ```bash
-$ gitgud commit --ai
+$ gitgud commit
 
 GitGud Smart Commit
 
@@ -74,15 +80,15 @@ Changes to be committed:
   Modified:  3 files
   Untracked: 1 files
 
-Generating commit message with AI...
+Generating commit message...
 
 Generated commit message:
 ┌────────────────────────────────────────┐
-│ feat: add AI-powered commit messages   │
+│ feat: add commit message generation    │
 │                                        │
-│ - Implement CommitMessageGenerator     │
-│ - Add commit command with AI support   │
-│ - Support manual and AI-generated msgs │
+│ - add commit_message_generator.py     │
+│ - add commit.py                       │
+│ - update cli.py                       │
 └────────────────────────────────────────┘
 
 ? What would you like to do?
@@ -169,7 +175,10 @@ cd your-git-repo
 # See repository health dashboard
 gitgud status
 
-# Commit with AI-generated message
+# Commit with auto-generated message (default)
+gitgud commit
+
+# Commit with AI enhancement (experimental)
 gitgud commit --ai
 
 # Commit with manual message
